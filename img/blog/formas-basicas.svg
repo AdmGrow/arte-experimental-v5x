@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" font-family="sans-serif"><rect width="800" height="300" fill="#fff6e8"/>
-<circle cx="110" cy="140" r="60" fill="none" stroke="#29335c" stroke-width="6"/><text x="110" y="260" text-anchor="middle" font-size="20">círculo</text>
-<text x="215" y="150" font-size="40">+</text>
-<path d="M270 190 L310 90 L350 190 Z" fill="none" stroke="#e4572e" stroke-width="6"/><text x="310" y="260" text-anchor="middle" font-size="20">triángulos</text>
-<text x="380" y="150" font-size="40">=</text>
-<g stroke="#1d1d1f" stroke-width="6" fill="none"><circle cx="560" cy="160" r="75"/><path d="M500 110 L505 45 L545 90"/><path d="M620 110 L615 45 L575 90"/><path d="M545 170 l15 12 l15 -12"/><path d="M485 175 h50 M585 175 h50"/></g>
-<circle cx="530" cy="140" r="8" fill="#1d1d1f"/><circle cx="590" cy="140" r="8" fill="#1d1d1f"/><text x="700" y="260" text-anchor="middle" font-size="20">gato</text></svg>

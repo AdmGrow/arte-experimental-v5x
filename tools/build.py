@@ -2,6 +2,8 @@ import json,re,subprocess,os,html
 os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)),'..'))
 B='https://admgrow.github.io/arte-experimental-v5x/'
 CH='https://www.youtube.com/@Arteexperimentalv5x'
+import functools
+@functools.lru_cache(None)
 def pages(pdf):
     n=int(re.search(r'Pages:\s+(\d+)',subprocess.run(['pdfinfo',pdf],capture_output=True,text=True).stdout)[1])
     return [subprocess.run(['pdftotext','-f',str(i),'-l',str(i),pdf,'-'],capture_output=True,text=True).stdout.replace('ﬁ','fi').replace('ﬂ','fl') for i in range(1,n+1)]
@@ -93,7 +95,7 @@ def page(path,title,desc,body,ld=None,img=None):
     return f'''<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{e(title)} · Arte experimental v5x</title><meta name="description" content="{e(desc)}"><link rel="canonical" href="{url}">
 <meta property="og:title" content="{e(title)}"><meta property="og:description" content="{e(desc)}">{og}
-<link rel="stylesheet" href="{d}style.css"><script>document.documentElement.dataset.theme=localStorage.getItem('tema')||(matchMedia('(prefers-color-scheme: dark)').matches?'oscuro':'claro')</script>{lds}</head>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;700&display=swap"><link rel="stylesheet" href="{d}style.css"><script>document.documentElement.dataset.theme=localStorage.getItem('tema')||(matchMedia('(prefers-color-scheme: dark)').matches?'oscuro':'claro')</script>{lds}</head>
 <body data-base="{d}"><a class="skip" href="#main">Saltar al contenido</a>
 <header class="top"><a class="logo" href="{d}index.html"><span aria-hidden="true">✎</span> Arte experimental <b>v5x</b></a>
 <nav aria-label="Principal"><a href="{d}tutoriales/index.html">Tutoriales</a><a href="{d}moldes/index.html">Moldes</a><a href="{d}historia/index.html">Historia</a><a href="{d}base-de-datos/index.html">Base de datos</a><a href="{d}blog/index.html">Blog</a><a href="{CH}" rel="noopener">YouTube</a>
@@ -112,6 +114,33 @@ def video_block(x):
         return f'<div class="soon" data-fecha="{x["fecha"]}" data-yt="{x["youtube_id"]}"><p><b>Estreno:</b> {fmt(x["fecha"])}</p><p class="countdown" aria-live="polite"></p></div>'
     if x['estado']=='programado': return f'<div class="soon" data-fecha="{x["fecha"]}"><p><b>Estreno:</b> {fmt(x["fecha"])}</p><p class="countdown"></p></div>'
     return '<div class="soon"><p>Video próximamente.</p></div>'
+
+# ---------- capturas de diapositivas (páginas reales de los PDF de Google Slides) ----------
+SM=json.load(open('data/slides-moldes.json'))
+NOISE2=re.compile(r'^(ARTE EXPERIMENTAL V5X|@Arteexperimentalv5x|Arte experimental v5x)$',re.I)
+def sl_title(pdf,i):
+    t=pages(pdf)[i-1];ls=[l.strip() for l in t.split('\n') if l.strip() and not NOISE2.match(l.strip()) and not NOISE.match(l.strip())]
+    return ' · '.join(ls[:2])
+def deck_of(key):
+    """key: tutorial-01-gato | molde-casita | molde-casita-video | molde-robot-bulon-video -> lista (src,w,h,caption)"""
+    if key in SM:
+        dn={'molde-casita-video':'Slides del video del molde de casita (Short 9:16)','molde-robot-bulon-video':'Slides del video del molde Bulón (Largo 16:9)'}[key]
+        return [(f'img/slides/{key}-{d["n"]}.webp',d['w'],d['h'],f'{dn}, diapositiva {d["n"]}: {d["t"]}') for d in SM[key]]
+    pdf=f'pdf/{key}.pdf';n=len(pages(pdf))
+    dn=('Slides del tutorial '+key[9:11]+' ('+key[12:]+')') if key.startswith('tutorial') else ('Molde A4 '+key[6:]+', hoja')
+    from PIL import Image as _I
+    def sz(i):return _I.open(f'img/p/{key}-{i}.webp').size
+    return [(f'img/p/{key}-{i}.webp',*sz(i),f'{dn} {i} de {n}: {sl_title(pdf,i)}' if key.startswith('molde') else f'{dn}, diapositiva {i} de {n}: {sl_title(pdf,i)}') for i in range(1,n+1)]
+def fig(src,w,h,cap,d):return f'<figure><a href="{d}{src}"><img src="{d}{src}" alt="{e(cap)}" loading="lazy" width="{w}" height="{h}"></a><figcaption>{e(cap)}</figcaption></figure>'
+def gallery(key,d,only=None,title=None):
+    items=deck_of(key)
+    if only: items=[items[i-1] for i in only if i<=len(items)] if not key in SM else [x for x in items if int(x[0].rsplit('-',1)[1][:-5]) in only]
+    v=' v' if items and items[0][2]>items[0][1] else ''
+    return (f'<h2 class="gal-h">{e(title)}</h2>' if title else '')+f'<div class="gal{v}">'+''.join(fig(*x,d) for x in items)+'</div>'
+def slide_codes(body,d):
+    body=re.sub(r'\{SLIDE:([\w-]+):(\d+)\}',lambda m:(lambda it:fig(*it,d) if it else '')(next((x for x in deck_of(m[1]) if re.search(rf'-{m[2]}\.webp$',x[0])),None)),body)
+    body=re.sub(r'\{GAL:([\w-]+)(?::([\d,]+))?\}',lambda m:gallery(m[1],d,[int(i) for i in m[2].split(',')] if m[2] else None),body)
+    return body
 def share(t):return f'<button class="btn ghost share" type="button" data-title="{e(t)}">Compartir</button>'
 # ---------- tutorials ----------
 tuts=[x for x in V if x['id'].startswith('tutorial')]
@@ -138,6 +167,7 @@ for k,x in enumerate(tuts):
 <h2>Materiales</h2><ul class="mat">{mat}</ul>
 <h2>Paso a paso</h2><ol class="steps">{steps}</ol>
 <h2>Consejos</h2><ul class="tips">{tips}</ul>
+{gallery(base,"../",title="Todas las diapositivas del tutorial")}
 <p class="lic">Las imágenes de los pasos son páginas del PDF del tutorial (material propio del canal). Licencia: uso personal libre; no reventa.</p>
 {nav}</article>'''
     open(p,'w').write(page(p,x['titulo'],f'{x["titulo"]}: paso a paso explicado, video y slides en PDF para descargar.',body,ld,x['imagen']))
@@ -185,6 +215,7 @@ for slug,m in M.items():
 <h2>Paso a paso</h2><ol class="steps plain">{st or "<li>Seguí la hoja de instrucciones del PDF.</li>"}</ol>
 <p class="lic">Las ilustraciones de los pasos están en la última hoja del PDF (vista previa arriba).</p>
 <h2>Consejos</h2><ul class="tips">{"".join(f"<li>{e(t)}</li>" for t in tips)}</ul>
+{gallery("molde-"+slug+"-video","../",title="Diapositivas del video (Google Slides)")}
 <h2>Video</h2>{video_block(x)}
 <nav class="pn"><a href="index.html">← Todos los moldes</a><a href="{"robot-bulon" if slug=="casita" else "casita"}.html">{"Molde de robot Bulón" if slug=="casita" else "Molde de casita de papel"} →</a></nav></article>'''
     ld={"@context":"https://schema.org","@type":"HowTo","name":m['t'],"image":B+x['imagen'],"supply":[{"@type":"HowToSupply","name":a} for a in mats],"step":[{"@type":"HowToStep","text":s} for s in stp]}
@@ -213,9 +244,18 @@ for f in sorted(glob.glob('posts/[!_]*.html')):
 P.sort(key=lambda x:x['fecha'],reverse=True)
 def ytembed(m):return f'<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/{m[1]}" title="Video de YouTube" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe></div>'
 for x in P:
-    body=re.sub(r'\{YT:([\w-]{11})\}',ytembed,x['body'].replace('{R}','../'))
+    body=slide_codes(re.sub(r'\{YT:([\w-]{11})\}',ytembed,x['body'].replace('{R}','../')),'../')
+    ns=body.count('<section class="slide">');cnt=[0]
+    def numslide(m):
+        cnt[0]+=1;k=cnt[0]
+        return f'<section class="slide" id="d{k}"><span class="brand">Arte experimental v5x · {k}/{ns}</span>'
+    body=re.sub(r'<section class="slide">',numslide,body)
+    body=body.replace('</section>','<p class="handle">@Arteexperimentalv5x</p></section>')
+    cimg=x.get('portada')
+    cover=f'<header class="deck-cover"><span class="brand">Arte experimental v5x</span><div><p class="sk">{e(x.get("serie","Blog") )} · {e((x.get("etiquetas") or ["post"])[0])}</p><h1>{e(x["titulo"])}</h1><p class="lead">{e(x["resumen"])}</p><hr class="rule"><p class="handle">{ns} diapositivas · {fmt(x["fecha"])}</p></div>'+(fig(*next(it for it in deck_of(cimg[0]) if it[0].endswith(f"-{cimg[1]}.webp")),'../') if cimg else '')+'</header>'
+    body=cover+body
     ld={"@context":"https://schema.org","@type":"Article","headline":x['titulo'],"description":x['resumen'],"image":B+x['imagen'],"datePublished":x['fecha'],"dateModified":x['fecha'],"inLanguage":"es-AR","mainEntityOfPage":B+f"blog/{x['slug']}.html","author":{"@type":"Organization","name":"Arte experimental v5x","url":CH},"publisher":{"@type":"Organization","name":"Arte experimental v5x","url":B},"keywords":", ".join(x.get('etiquetas',[]))}
-    open(f"blog/{x['slug']}.html",'w').write(page(f"blog/{x['slug']}.html",x['titulo'],x['resumen'],f'<article class="post"><p class="crumbs"><a href="index.html">Blog</a> › {e(x["titulo"])}</p><p class="kicker">{fmt(x["fecha"])} · {e(", ".join(x.get("etiquetas",[])))}</p><h1>{e(x["titulo"])}</h1>{body}<p>{share(x["titulo"])}</p><p><a href="index.html">← Volver al blog</a></p></article>',ld,x['imagen']))
+    open(f"blog/{x['slug']}.html",'w').write(page(f"blog/{x['slug']}.html",x['titulo'],x['resumen'],f'<article class="post deck"><p class="crumbs"><a href="index.html">Blog</a> › {e(x["titulo"])}</p>{body}<p class="kicker">Publicado: {fmt(x["fecha"])} · {e(", ".join(x.get("etiquetas",[])))}</p><p>{share(x["titulo"])}</p><p><a href="index.html">← Volver al blog</a></p></article>',ld,x['imagen']))
 docs=sorted(glob.glob('docs/*.pdf'))
 dl=''.join(f'<li><a href="../{d}" download>{e(os.path.basename(d))}</a> ({os.path.getsize(d)//1024} KB)</li>' for d in docs)
 bl='<h1>Blog</h1><p class="lead">Guías útiles para dibujar, armar moldes y conocer el arte experimental.</p><div class="grid">'+''.join(f'<article class="card"><a href="{x["slug"]}.html"><img src="../{x["imagen"]}" alt="" loading="lazy" width="480" height="300"></a><div class="cb"><span class="tag">post</span><h3><a href="{x["slug"]}.html">{e(x["titulo"])}</a></h3><p class="date">{fmt(x["fecha"])}</p><p>{e(x["resumen"])}</p></div></article>' for x in P)+'</div>'

@@ -1,0 +1,78 @@
+{
+ "molde-casita-video": [
+  {
+   "n": 2,
+   "w": 507,
+   "h": 900,
+   "t": "PASO 1 DE 4 · Imprimí el molde en A4"
+  },
+  {
+   "n": 3,
+   "w": 507,
+   "h": 900,
+   "t": "PASO 2 DE 4 · Recortá por la línea"
+  },
+  {
+   "n": 4,
+   "w": 507,
+   "h": 900,
+   "t": "PASO 3 DE 4 · Doblá las líneas de puntos"
+  },
+  {
+   "n": 6,
+   "w": 507,
+   "h": 900,
+   "t": "¿TE GUSTÓ? · Se viene: un robot"
+  }
+ ],
+ "molde-robot-bulon-video": [
+  {
+   "n": 2,
+   "w": 900,
+   "h": 507,
+   "t": "ASÍ QUEDA · Unos 12 cm de alto"
+  },
+  {
+   "n": 4,
+   "w": 900,
+   "h": 507,
+   "t": "PASO 1 · Imprimí en tamaño real"
+  },
+  {
+   "n": 5,
+   "w": 900,
+   "h": 507,
+   "t": "HOJA 1 · Cabeza y cuerpo"
+  },
+  {
+   "n": 6,
+   "w": 900,
+   "h": 507,
+   "t": "HOJA 2 · Orugas, brazos y antena"
+  },
+  {
+   "n": 7,
+   "w": 900,
+   "h": 507,
+   "t": "PASO 2 · Recortá las seis piezas"
+  },
+  {
+   "n": 8,
+   "w": 900,
+   "h": 507,
+   "t": "PASO 3 · Marcá y doblá"
+  },
+  {
+   "n": 10,
+   "w": 900,
+   "h": 507,
+   "t": "PASO 5 · Armá el cuerpo"
+  },
+  {
+   "n": 12,
+   "w": 900,
+   "h": 507,
+   "t": "PASO 7 · Pegá la cabeza centrada"
+  }
+ ]
+}

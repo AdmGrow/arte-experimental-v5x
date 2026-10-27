@@ -1,6 +1,15 @@
-<!--{"titulo":"Título del post","slug":"titulo-del-post","fecha":"2026-11-01","resumen":"Una o dos líneas para el índice y buscadores.","imagen":"img/subidas/mi-imagen.jpg","etiquetas":["dibujo"]}-->
-<p class="lead">Párrafo de introducción.</p>
-<figure><img src="{R}img/subidas/mi-imagen.jpg" alt="Describí la imagen" loading="lazy"><figcaption>Epígrafe.</figcaption></figure>
-<h2>Subtítulo</h2>
-<p>Texto. Enlace interno: <a href="{R}tutoriales/01-gato.html">tutorial del gato</a>. Documento: <a href="{R}docs/mi-documento.pdf">PDF</a>.</p>
-<p>Video de YouTube (pegá sólo el ID de 11 caracteres): {YT:B-dhUzr_28Y}</p>
+<!--{"titulo":"Título del post","slug":"titulo-del-post","fecha":"2026-11-03","serie":"Post semanal","resumen":"Una o dos líneas: se usan en la portada del post, el índice y buscadores.","imagen":"img/p/tutorial-01-gato-1.webp","portada":["tutorial-01-gato",1],"etiquetas":["dibujo"]}-->
+<!-- PLANTILLA DE POST SEMANAL con maqueta de diapositivas (misma paleta/tipos que los Google Slides del canal).
+  · La portada (título + resumen + captura) la arma build.py con "portada": [mazo, página]. Sacala si no hay captura útil.
+  · Cada <section class="slide"> es una diapositiva: se numera sola (1/N) y lleva @handle al pie.
+  · Capturas reales: {SLIDE:mazo:página}  ·  galería: {GAL:mazo} o {GAL:mazo:2,3,5}
+    mazos: tutorial-01-gato … tutorial-13-osito, molde-casita, molde-robot-bulon (hojas A4),
+           molde-casita-video, molde-robot-bulon-video (slides de los videos).
+    El pie de foto sale solo: dice de qué diapositiva viene. NO usar imágenes generadas por IA.
+  · Sin captura útil para un punto → sin imagen. -->
+<section class="slide"><p class="sk">Antes de arrancar</p><h2>Qué vas a aprender</h2>
+<ul><li>Punto 1</li><li>Punto 2</li></ul></section>
+<section class="slide"><div class="split"><div><p class="sk">Paso 1 de 3</p><h2>Título del paso</h2><p>Explicación corta, como en la diapositiva.</p><ul class="dots"><li class="on"></li><li></li><li></li></ul></div>{SLIDE:tutorial-01-gato:3}</div></section>
+<section class="slide"><p class="sk">Paso 2 de 3</p><h2>Paso sin captura</h2><div class="box"><p>Recuadro claro (como el panel crema de las slides) para datos, tablas o listas.</p></div><p class="note">Nota o advertencia (borde amarillo).</p></section>
+<section class="slide"><p class="sk">Galería</p><h2>Diapositivas del tutorial</h2>{GAL:tutorial-01-gato:3,4,5}</section>
+<section class="slide"><p class="sk">¿Te gustó?</p><h2>Seguí en el canal</h2><p>Video: {YT:B-dhUzr_28Y}</p><p><a href="https://www.youtube.com/@Arteexperimentalv5x" rel="noopener">@Arteexperimentalv5x</a> · <a href="{R}tutoriales/index.html">Todos los tutoriales</a></p></section>
