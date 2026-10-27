@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://admgrow.github.io/arte-experimental-v5x/sitemap.xml
