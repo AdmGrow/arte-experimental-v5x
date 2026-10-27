@@ -1,0 +1,16 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Base de datos del canal · Arte experimental v5x</title><meta name="description" content="Tabla interactiva con todos los videos, Shorts, moldes y episodios del canal Arte experimental v5x."><link rel="canonical" href="https://admgrow.github.io/arte-experimental-v5x/base-de-datos/">
+<meta property="og:title" content="Base de datos del canal"><meta property="og:description" content="Tabla interactiva con todos los videos, Shorts, moldes y episodios del canal Arte experimental v5x.">
+<link rel="stylesheet" href="../style.css"><script>document.documentElement.dataset.theme=localStorage.getItem('tema')||(matchMedia('(prefers-color-scheme: dark)').matches?'oscuro':'claro')</script></head>
+<body data-base="../"><a class="skip" href="#main">Saltar al contenido</a>
+<header class="top"><a class="logo" href="../index.html"><span aria-hidden="true">✎</span> Arte experimental <b>v5x</b></a>
+<nav aria-label="Principal"><a href="../tutoriales/index.html">Tutoriales</a><a href="../moldes/index.html">Moldes</a><a href="../historia/index.html">Historia</a><a href="../base-de-datos/index.html">Base de datos</a><a href="https://www.youtube.com/@Arteexperimentalv5x" rel="noopener">YouTube</a>
+<button class="tema" type="button" aria-label="Cambiar modo claro/oscuro">◐</button></nav></header>
+<main id="main"><h1>Base de datos del canal</h1><p>Todos los videos, Shorts, moldes y episodios en una tabla. Fuente única: <a href="../data/videos.json">data/videos.json</a>. Sin métricas: solo estado y fechas.</p>
+<div class="dbbar"><label>Buscar <input id="q" type="search" placeholder="gato, molde, dadaísmo…"></label>
+<label>Tipo <select id="ft"><option value="">Todos</option><option>tutorial</option><option>short</option><option>molde</option><option>historia</option></select></label>
+<label>Tema <select id="fm"><option value="">Todos</option><option>animal</option><option>insecto</option><option>molde</option><option>historia</option></select></label>
+<label>Estado <select id="fe"><option value="">Todos</option><option>publicado</option><option>programado</option><option>pendiente</option></select></label></div>
+<p id="cnt" aria-live="polite"></p><div class="tw"><table id="db"><thead><tr><th><button data-k="titulo">Título</button></th><th><button data-k="tipo">Tipo</button></th><th><button data-k="tema">Tema</button></th><th><button data-k="estado">Estado</button></th><th><button data-k="fecha">Fecha</button></th><th>Enlaces</th></tr></thead><tbody></tbody></table></div></main>
+<footer>Arte experimental v5x · <a href="https://www.youtube.com/@Arteexperimentalv5x" rel="noopener">Canal de YouTube</a> · Licencia de descargas: uso personal libre; no reventa.</footer>
+<script src="../app.js" defer></script></body></html>
