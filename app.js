@@ -4,7 +4,7 @@ var tb=document.querySelector('.tema');if(tb)tb.onclick=function(){var t=R.datas
 function fmt(f){if(!f)return'';var d=new Date(f);return d.toLocaleDateString('es-AR',{weekday:'short',day:'2-digit',month:'2-digit',timeZone:'America/Argentina/San_Luis'})+' '+d.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit',timeZone:'America/Argentina/San_Luis'})}
 function left(f){var s=(new Date(f)-Date.now())/1000;if(s<=0)return null;var d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60);return(d?d+' d ':'')+h+' h '+m+' min'}
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-function link(x){return base+(x.pagina.indexOf('historia/')===0?'historia/index.html'+x.pagina.slice(8):x.pagina)}
+function link(x){return /^https?:/.test(x.pagina)?x.pagina:base+(x.pagina.indexOf('historia/')===0?'historia/index.html'+x.pagina.slice(8):x.pagina)}
 // countdowns: tras la fecha se habilita el video
 function tick(){document.querySelectorAll('.soon[data-fecha]').forEach(function(el){var l=left(el.dataset.fecha),c=el.querySelector('.countdown');if(l){c&&(c.textContent='Faltan '+l)}else if(el.dataset.yt&&!el.dataset.done){el.dataset.done=1;el.outerHTML='<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/'+el.dataset.yt+'" title="Video de YouTube" loading="lazy" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>'}else if(c){c.textContent='¡Ya se estrenó! Buscalo en el canal.'}})}
 tick();setInterval(tick,30000);

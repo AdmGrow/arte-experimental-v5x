@@ -32,19 +32,19 @@ def parse_tut(pdf):
         elif re.search(r'CONSEJO|ERRORES',t,re.I) and i>2:
             tips=[' '.join(x) for x in bl]
     return steps,mat,tips
-T=[('01','gato','Cómo dibujar un gato fácil con lápiz','animal','B-dhUzr_28Y',None,'publicado'),
-('02','pato','Cómo dibujar un pato con marcador','animal','D36bi5JCMKY',None,'publicado'),
-('03','estrella','Cómo dibujar una estrella con fibras','animal','H6GIoIHenek',None,'publicado'),
-('04','pez','Cómo dibujar un pez con birome','animal','C1FRxqEXmPk','2026-10-27','programado'),
-('05','caracol','Cómo dibujar un caracol con marcador','insecto','rIliGBPQLhI','2026-10-28','programado'),
-('06','perrito','Cómo dibujar un perrito kawaii con fibras','animal','tXH91Qugvtc','2026-10-29','programado'),
-('07','conejo','Cómo dibujar un conejo de una sola línea','animal','tlio24sl6_A','2026-10-30','programado'),
-('08','buho','Cómo dibujar un búho con lápiz y sombreado','animal','uhTSJnwXiv4','2026-10-31','programado'),
-('09','tortuga','Cómo dibujar una tortuga con crayones','animal','Kozza5oHPfg','2026-11-01','programado'),
-('10','pinguino','Cómo dibujar un pingüino con marcador y relleno plano','animal','7BEKPFmi9sY','2026-11-02','programado'),
-('11','zorro','Cómo dibujar un zorro con acuarela','animal','lzC0j1ICisE','2026-11-03','programado'),
-('12','elefante','Cómo dibujar un elefante con lápiz realista','animal','aq2IBz58shw','2026-11-04','programado'),
-('13','osito','Cómo dibujar un osito kawaii con lápices de colores','animal','F3XQyZxVVHs','2026-11-05','programado')]
+T=[('01','gato','Cómo dibujar un gato fácil con lápiz','animal','B-dhUzr_28Y','2026-10-20T20:07:37-03:00','publicado'),
+('02','pato','Cómo dibujar un pato con marcador','animal','D36bi5JCMKY','2026-10-21T18:00:29-03:00','publicado'),
+('03','estrella','Cómo dibujar una estrella con fibras','animal','H6GIoIHenek','2026-10-22T18:00:18-03:00','publicado'),
+('04','pez','Cómo dibujar un pez con birome','animal','C1FRxqEXmPk','2026-10-27T12:00:39-03:00','publicado'),
+('05','caracol','Cómo dibujar un caracol con marcador','insecto','rIliGBPQLhI','2026-10-28T12:00:35-03:00','publicado'),
+('06','perrito','Cómo dibujar un perrito kawaii con fibras','animal','tXH91Qugvtc','2026-10-29T12:00:31-03:00','publicado'),
+('07','conejo','Cómo dibujar un conejo de una sola línea','animal','tlio24sl6_A','2026-10-30T12:00:37-03:00','publicado'),
+('08','buho','Cómo dibujar un búho con lápiz y sombreado','animal','uhTSJnwXiv4','2026-10-31T12:00:04-03:00','publicado'),
+('09','tortuga','Cómo dibujar una tortuga con crayones','animal','Kozza5oHPfg','2026-11-01T12:00:30-03:00','publicado'),
+('10','pinguino','Cómo dibujar un pingüino con marcador y relleno plano','animal','7BEKPFmi9sY','2026-11-02T12:00:01-03:00','publicado'),
+('11','zorro','Cómo dibujar un zorro con acuarela','animal','lzC0j1ICisE','2026-11-03T12:00:22-03:00','publicado'),
+('12','elefante','Cómo dibujar un elefante con lápiz realista','animal','aq2IBz58shw','2026-11-04T12:00:04-03:00','publicado'),
+('13','osito','Cómo dibujar un osito kawaii con lápices de colores','animal','F3XQyZxVVHs','2026-11-05T12:00:25-03:00','publicado')]
 H=[('Dadaísmo','Movimiento surgido en Zúrich en 1916, en torno al Cabaret Voltaire, que cuestionó la lógica y las convenciones del arte.'),
 ('Surrealismo','Movimiento iniciado en París en 1924 con el primer Manifiesto de André Breton; exploró los sueños y el inconsciente.'),
 ('Futurismo','Movimiento italiano lanzado en 1909 con el manifiesto de Filippo Tommaso Marinetti, fascinado por la velocidad y la máquina.'),
@@ -60,10 +60,17 @@ H=[('Dadaísmo','Movimiento surgido en Zúrich en 1916, en torno al Cabaret Volt
 V=[]
 for n,s,t,tema,yt,f,e in T:
     st,mat,tips=parse_tut(f'pdf/tutorial-{n}-{s}.pdf')
-    V.append(dict(id=f'tutorial-{n}-{s}',tipo='tutorial' if e=='publicado' else 'short',titulo=t,tema=tema,estado=e,
-      fecha=(f+'T12:00:00-03:00') if f else None,youtube_id=yt,youtube_url=f'https://youtu.be/{yt}',
+    V.append(dict(id=f'tutorial-{n}-{s}',tipo='tutorial' if n in ('01','02','03') else 'short',titulo=t,tema=tema,estado=e,
+      fecha=(f if 'T' in f else f+'T12:00:00-03:00') if f else None,youtube_id=yt,youtube_url=f'https://youtu.be/{yt}',
       pagina=f'tutoriales/{n}-{s}.html',pdf=f'pdf/tutorial-{n}-{s}.pdf',imagen=f'img/p/tutorial-{n}-{s}-1.webp',
       paginas_pdf=len(pages(f'pdf/tutorial-{n}-{s}.pdf')),_steps=st,_mat=mat,_tips=tips,serie='Tutoriales de dibujo'))
+# Shorts publicados sin PDF propio (verificados en youtube.com/@Arteexperimentalv5x/shorts, 2026-11-11)
+for sid,t,yt,f,pg in [('short-gato-8-pasos','¿Un gato en 8 pasos? Dibujo fácil con lápiz','40-cO1jEW3Q','2026-10-31T18:00:29-03:00','tutoriales/01-gato.html'),
+ ('short-pato-8-pasos','¿Un pato con marcador? Sin miedo, en 8 pasos','o_kkSJy9-50','2026-11-07T18:00:25-03:00','tutoriales/02-pato.html'),
+ ('short-20-hornero','Hornero realista y simple: sin pintar y pintado','Nsll2gFC9B0','2026-11-10T12:00:35-03:00',None),
+ ('short-21-dinosaurio','Dinosaurio kawaii: dibujo sin pintar y después pintado','iHH3FNN1Oms','2026-11-10T18:00:23-03:00',None)]:
+    V.append(dict(id=sid,tipo='short',titulo=t,tema='animal',estado='publicado',fecha=f,youtube_id=yt,youtube_url=f'https://youtu.be/{yt}',
+      pagina=pg or f'https://youtu.be/{yt}',pdf=None,imagen=f'https://i.ytimg.com/vi/{yt}/hqdefault.jpg',serie='Shorts'))
 for slug,t,np_ in [('casita','Molde de casita de papel',2),('robot-bulon','Molde de robot Bulón',3)]:
     V.append(dict(id=f'molde-{slug}',tipo='molde',titulo=t,tema='molde',estado='pendiente',fecha=None,youtube_id=None,youtube_url=None,
       pagina=f'moldes/{slug}.html',pdf=f'pdf/molde-{slug}.pdf',imagen=f'img/p/molde-{slug}-1.webp',paginas_pdf=np_,serie='Moldes',nota='Video próximamente'))
@@ -73,7 +80,7 @@ for i,(t,r) in enumerate(H,1):
       pagina=f'historia/#ep{i}',pdf=None,imagen=f'img/historia/ep{i:02d}.svg',resumen=r,serie='Historia del arte experimental'))
 pub=[{k:v for k,v in x.items() if not k.startswith('_')} for x in V]
 os.makedirs('data',exist_ok=True)
-json.dump(dict(canal='Arte experimental v5x',handle='@Arteexperimentalv5x',url_canal=CH,actualizado='2026-10-26',
+json.dump(dict(canal='Arte experimental v5x',handle='@Arteexperimentalv5x',url_canal=CH,actualizado='2026-11-11',
   zona_horaria='America/Argentina (GMT-3)',nota='Fuente única del sitio. Sin métricas.',items=pub),open('data/videos.json','w'),ensure_ascii=False,indent=1)
 # ---------- historia svgs (propias) ----------
 os.makedirs('img/historia',exist_ok=True)
@@ -173,7 +180,7 @@ for k,x in enumerate(tuts):
     open(p,'w').write(page(p,x['titulo'],f'{x["titulo"]}: paso a paso explicado, video y slides en PDF para descargar.',body,ld,x['imagen']))
 def card(x,d=''):
     img=f'https://i.ytimg.com/vi/{x["youtube_id"]}/hqdefault.jpg' if x['estado']=='publicado' else d+x['imagen']
-    link=d+x['pagina'] if not x['pagina'].startswith('historia') else d+'historia/index.html#'+x['pagina'].split('#')[1]
+    link=x['pagina'] if x['pagina'].startswith('http') else d+x['pagina'] if not x['pagina'].startswith('historia') else d+'historia/index.html#'+x['pagina'].split('#')[1]
     dl=f'<a class="btn sm" href="{d}{x["pdf"]}" download>⬇ PDF</a>' if x.get('pdf') else ''
     return f'<article class="card" data-tipo="{x["tipo"]}" data-tema="{x["tema"]}" data-estado="{x["estado"]}"><a href="{link}"><img src="{img}" alt="" loading="lazy" width="480" height="300"></a><div class="cb">{badge(x)} <span class="tag">{x["tipo"]}</span><h3><a href="{link}">{e(x["titulo"])}</a></h3><p class="date">{fmt(x["fecha"]) or ("Video próximamente" if x["tipo"]=="molde" else "")}</p>{dl}</div></article>'
 filt='''<div class="filters" role="group" aria-label="Filtrar"><button class="chip on" data-f="*">Todo</button><button class="chip" data-f="tutorial">Videos</button><button class="chip" data-f="short">Shorts</button><button class="chip" data-f="molde">Moldes</button><button class="chip" data-f="historia">Historia</button><button class="chip" data-f="publicado">Publicados</button><button class="chip" data-f="programado">Programados</button></div>'''
@@ -262,6 +269,6 @@ bl='<h1>Blog</h1><p class="lead">Guías útiles para dibujar, armar moldes y con
 if dl: bl+=f'<h2>Documentos</h2><ul>{dl}</ul>'
 open('blog/index.html','w').write(page('blog/index.html','Blog','Guías y posts útiles del canal Arte experimental v5x: dibujo, moldes de papel e historia del arte.',bl,{"@context":"https://schema.org","@type":"Blog","name":"Blog de Arte experimental v5x","url":B+"blog/","blogPost":[{"@type":"BlogPosting","headline":x['titulo'],"url":B+f"blog/{x['slug']}.html","datePublished":x['fecha']} for x in P]}))
 # ---------- sitemap ----------
-urls=['','tutoriales/','moldes/','historia/','base-de-datos/','blog/']+[f"blog/{x['slug']}.html" for x in P]+[x['pagina'] for x in V if not x['pagina'].startswith('historia')]
+urls=['','tutoriales/','moldes/','historia/','base-de-datos/','blog/']+[f"blog/{x['slug']}.html" for x in P]+list(dict.fromkeys(x['pagina'] for x in V if not x['pagina'].startswith(('historia','http'))))
 open('sitemap.xml','w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'<url><loc>{B}{u}</loc><lastmod>2026-10-26</lastmod></url>\n' for u in urls)+'</urlset>\n')
 print('ok',len(V))
