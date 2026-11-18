@@ -68,7 +68,23 @@ for n,s,t,tema,yt,f,e in T:
 for sid,t,yt,f,pg in [('short-gato-8-pasos','¿Un gato en 8 pasos? Dibujo fácil con lápiz','40-cO1jEW3Q','2026-10-31T18:00:29-03:00','tutoriales/01-gato.html'),
  ('short-pato-8-pasos','¿Un pato con marcador? Sin miedo, en 8 pasos','o_kkSJy9-50','2026-11-07T18:00:25-03:00','tutoriales/02-pato.html'),
  ('short-20-hornero','Hornero realista y simple: sin pintar y pintado','Nsll2gFC9B0','2026-11-10T12:00:35-03:00',None),
- ('short-21-dinosaurio','Dinosaurio kawaii: dibujo sin pintar y después pintado','iHH3FNN1Oms','2026-11-10T18:00:23-03:00',None)]:
+ ('short-21-dinosaurio','Dinosaurio kawaii: dibujo sin pintar y después pintado','iHH3FNN1Oms','2026-11-10T18:00:23-03:00',None),
+ # verificados en youtube.com/@Arteexperimentalv5x/shorts, 2026-11-18
+ ('short-mono-birome','Mono con birome: realista simple, sin pintar y pintado','aQeoBpfHySc','2026-11-11T12:00:01-03:00',None),
+ ('short-cangrejo','Dibujá un cangrejo realista y simple: sin pintar y pintado','7yjY6-0XbdQ','2026-11-11T18:30:26-03:00',None),
+ ('short-erizo-birome','Erizo con birome: primero sin pintar, después pintado','zuWit22XHr4','2026-11-12T10:30:29-03:00',None),
+ ('short-delfin','Dibujá un delfín realista: línea primero, color después','hqch0hQVIWA','2026-11-12T18:30:34-03:00',None),
+ ('short-carpincho','Carpincho fácil: primero sin pintar y después pintado','y5Epw6V7OLk','2026-11-13T10:30:14-03:00',None),
+ ('short-gallina','Dibujá una gallina realista y simple: sin pintar y pintado','8iaVYTubpnU','2026-11-13T18:30:31-03:00',None),
+ ('short-flamenco-acuarela','Flamenco con acuarela: sin pintar y después pintado','xEbaTmiBkxw','2026-11-14T10:30:10-03:00',None),
+ ('short-estrella-fibras','Estrella con carita y fibras de colores','BVOPFHakc5Y','2026-11-14T18:30:28-03:00','tutoriales/03-estrella.html'),
+ ('short-tucan','Dibujá un tucán realista y simple: sin pintar y pintado','jQj0HlzK88g','2026-11-15T10:30:31-03:00',None),
+ ('short-caballo','Dibujá un caballo realista y simple: primero sin pintar, después pintado','20z35wNervw','2026-11-15T18:30:19-03:00',None),
+ ('short-oveja-tempera','Oveja esponjosa: primero sin pintar, después con témpera','RrOvolbNyO4','2026-11-16T10:30:10-03:00',None),
+ ('short-koala-lapiz','Koala con lápiz: realista y simple, sin pintar y pintado','O393pQf4T-4','2026-11-16T18:30:11-03:00',None),
+ ('short-cerdito-kawaii-fibras','Cerdito kawaii: sin pintar primero y después pintado','IWc1I-kPDlE','2026-11-17T10:30:14-03:00',None),
+ ('short-ardilla-lapices-de-colores','Dibujá una ardilla realista y simple: sin pintar y pintado','ymkuueVaWHM','2026-11-17T18:30:27-03:00',None),
+ ('short-loro-acuarela','Loro con acuarela: primero sin pintar, después pintado','wvrmti0f-FY','2026-11-18T10:30:21-03:00',None)]:
     V.append(dict(id=sid,tipo='short',titulo=t,tema='animal',estado='publicado',fecha=f,youtube_id=yt,youtube_url=f'https://youtu.be/{yt}',
       pagina=pg or f'https://youtu.be/{yt}',pdf=None,imagen=f'https://i.ytimg.com/vi/{yt}/hqdefault.jpg',serie='Shorts'))
 for slug,t,np_ in [('casita','Molde de casita de papel',2),('robot-bulon','Molde de robot Bulón',3)]:
@@ -76,7 +92,7 @@ for slug,t,np_ in [('casita','Molde de casita de papel',2),('robot-bulon','Molde
       pagina=f'moldes/{slug}.html',pdf=f'pdf/molde-{slug}.pdf',imagen=f'img/p/molde-{slug}-1.webp',paginas_pdf=np_,serie='Moldes',nota='Video próximamente'))
 for i,(t,r) in enumerate(H,1):
     V.append(dict(id=f'historia-{i:02d}',tipo='historia',titulo=f'Historia del arte experimental #{i}: {t}',tema='historia',
-      estado='programado' if i<=2 else 'pendiente',fecha=f'2026-10-{26+i}T18:00:00-03:00' if i<=2 else None,youtube_id=None,youtube_url=None,
+      estado='pendiente',fecha=None,youtube_id=None,youtube_url=None,
       pagina=f'historia/#ep{i}',pdf=None,imagen=f'img/historia/ep{i:02d}.svg',resumen=r,serie='Historia del arte experimental'))
 pub=[{k:v for k,v in x.items() if not k.startswith('_')} for x in V]
 os.makedirs('data',exist_ok=True)
@@ -232,7 +248,7 @@ open('moldes/index.html','w').write(page('moldes/index.html','Moldes de papel','
 # ---------- historia ----------
 os.makedirs('historia',exist_ok=True)
 eps=''.join(f'<article class="ep" id="ep{i}"><img src="../img/historia/ep{i:02d}.svg" alt="" width="320" height="180"><div><p class="kicker">Episodio {i} {badge(x)}</p><h2>{e(H[i-1][0])}</h2><p>{e(x["resumen"])}</p>{video_block(x) if x["estado"]=="programado" else "<p class=date>Pendiente de producción.</p>"}</div></article>' for i,x in enumerate([v for v in V if v['tipo']=='historia'],1))
-hb=f'<h1>Historia del arte experimental</h1><p class="lead">Serie de 12 episodios planeados que recorre movimientos del arte del siglo XX hasta hoy. Los episodios 1 y 2 ya están hechos y programados; el resto está en producción.</p><p class="lic">Las ilustraciones de esta página son composiciones abstractas propias del sitio, no reproducciones de obras.</p><div class="eps">{eps}</div>'
+hb=f'<h1>Historia del arte experimental</h1><p class="lead">Serie de 12 episodios planeados que recorre movimientos del arte del siglo XX hasta hoy. Los episodios todavía no se publicaron en el canal: la serie está en producción.</p><p class="lic">Las ilustraciones de esta página son composiciones abstractas propias del sitio, no reproducciones de obras.</p><div class="eps">{eps}</div>'
 open('historia/index.html','w').write(page('historia/index.html','Historia del arte experimental (serie)','Serie de 12 episodios sobre la historia del arte experimental: Dadaísmo, Surrealismo, Futurismo y más.',hb))
 # ---------- base de datos ----------
 os.makedirs('base-de-datos',exist_ok=True)
